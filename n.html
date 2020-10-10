@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>网格系统</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<style>
+	*{
+		box-sizing: border-box;
+	}
+	.container{
+	        position: relative;
+	        height:300px;
+	    }
+	div{
+		padding: 10px;
+	}
+	@media only screen and (min-width:600px) {
+	  .col-one{
+	          position:absolute;
+	          left:0px;
+	          width:66%;
+	          height: 66%;
+	          background-color: red;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-two{
+	          position:absolute;
+	          left:66%;
+	          height: 33%;
+	          width: 33%;
+	          background-color: cyan;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-three{
+	          position:absolute;
+	          top: 66%;
+	          left: 0px;
+	          height: 33%;
+	          width:33%;
+	          background-color: darkolivegreen;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-four{
+	          position:absolute;
+	          top: 33%;
+	          left:66%;
+	          height: 66%;
+	          width:33%;
+	          background-color: purple;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-five{
+	          position:absolute;
+	          top: 66%;
+	          left:33%;
+	          height: 33%;
+	          width:33%;
+	          background-color: orange;
+	          border: 10px solid #f1f1f1;
+	      }
+	}
+	@media screen and (max-width:599px) {
+	  .col-one{
+	          left:0px;
+	          width:100%;
+	          height: 66%;
+	          background-color: red;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-two{
+	          left:0px;
+	          height: 33%;
+	          width: 100%;
+	          background-color: cyan;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-three{
+	          left: 0px;
+	          height: 33%;
+	          width:100%;
+	          background-color: darkolivegreen;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-four{
+	          left:0px;
+	          height: 66%;
+	          width:100%;
+	          background-color: purple;
+	          border: 10px solid #f1f1f1;
+	      }
+	      .col-five{
+	          left:0px;
+	          height: 33%;
+	          width:100%;
+	          background-color: orange;
+	          border: 10px solid #f1f1f1;
+	      }
+	}
+</style>
+</head>
+<body>
+	<div class="container">
+	        <div class="col-one">1</div>
+	        <div class="col-two">2</div>
+	        <div class="col-three">3</div>
+	        <div class="col-four">4</div>
+			<div class="col-five">5</div>
+	    </div>
+</body>
+</html>
