@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/new_file.css"/>
+		<script src="js/vue.js"></script>
+	</head>
+	<body>
+		<div id="table">
+			<div id="addcontent" v-if="addlist">
+				<div class="addcontent">
+					<div class="title">
+						添加
+						<span @click="addlist=false">×</span>
+					</div>
+					<div class="content">
+						<input type="text" v-model="addDetail.date" name="date" value="" placeholder="date"/>
+						<input type="text" v-model="addDetail.no" name="no" value="" placeholder="no"/>
+						<input type="text" v-model="addDetail.description" name="description" value="" placeholder="description"/>
+						<input type="text" v-model="addDetail.total" name="total" value="" placeholder="total"/>
+						<button @click="add2" style="margin: auto;">确定</button>
+					</div>
+				</div>
+			</div>
+			<div id="addcontent" v-if="editlist">
+				<div class="addcontent">
+					<div class="title">
+						编辑
+						<span @click="editlist=false">×</span>
+					</div>
+					<div class="content">
+						<input type="text" v-model="editDetail.date" name="date" value="" placeholder="date"/>
+						<input type="text" v-model="editDetail.no" name="no" value="" placeholder="no"/>
+						<input type="text" v-model="editDetail.description" name="description" value="" placeholder="description"/>
+						<input type="text" v-model="editDetail.total" name="total" value="" placeholder="total"/>
+						<button @click="update" style="margin: auto;">确定</button>
+					</div>
+				</div>
+			</div>
+			<table class="mtable">
+				<thead>
+				<tr>
+					<th>&nbsp;&nbsp;</th>
+					<th><span @click="arysort" :class="classObject"></span></th>
+					<th>{{head.h2}}</th>
+					<th>{{head.h3}}</th>
+					<th class="tot">{{head.h4}}</th>
+				</tr>
+				</thead>
+				<tr v-for="(abc,idx) in currentPageData" :key="idx">
+					<td><label :class="checkBox"><input type="checkbox" :value="idx" v-model="selectArr"></label></td>
+					<td>{{abc.date}}</td>
+					<td>{{abc.no}}</td>
+					<td>{{abc.description}}</td>
+					<td class="tot">{{abc.total}}</td>
+					<td><span @click="deletelist(abc.no,idx)" class="del">删除</span><span @click="edit(abc)" class="edit">编辑</span></td>
+				</tr>
+			</table>
+			<div class="page">
+				<span @click="prevPage">&lt;</span>
+				<span v-for="page in totalPage"><a href="#" @click="clickPage(page)" :class="[{cur:page==currentPage}]">&nbsp;&nbsp;{{page}}&nbsp;&nbsp;</a></span>
+				<span @click="nextPage">&gt;</span>
+				<sapn class="bar"></sapn>
+				<input type="text" v-model="searchNo" @keyup.enter="onEnterPress" class="seach" placeholder="Search"/>
+				<button @click="add1" class="btn1">添加</button>
+				<button @click="alldel" class="btn2">批量删除</button>
+			</div>
+		</div>
+		<script>
+			var a=new Vue({
+				el:"#table",
+				data:{
+					searchNo:'',
+					selectArr:[],
+					addDetail:{},
+					editDtail:{},
+					editno:'',
+					editlist:false,
+					addlist:false,
+					downSort:true,
+					currentPage:1,
+					currentPageData:[],
+					pageSize:6,
+					totalPage:1,
+					abcs:[
+						{
+							date:'2017/10/13',
+							no:'000011',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/8/4',
+							no:'000012',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/6/12',
+							no:'000013',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2016/10/13',
+							no:'000014',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/8/4',
+							no:'000015',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/6/12',
+							no:'000016',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2020/10/13',
+							no:'000017',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/8/4',
+							no:'000018',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/6/12',
+							no:'000019',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2020/10/13',
+							no:'000020',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/8/4',
+							no:'000021',
+							description:'a b c',
+							total:28.00
+						},
+						{
+							date:'2019/6/12',
+							no:'000022',
+							description:'a b c',
+							total:28.00
+						}
+					],
+					head:{
+							h1:'Date',
+							h2:'#',
+							h3:'Description',
+							h4:'Total'
+					}
+				},
+				mounted(){
+					this.totalPage = Math.ceil(this.abcs.length/this.pageSize);
+					this.totalPage = this.totalPage==0?1:this.totalPage;
+					this.setCurrentPageData();
+				},
+				computed:{
+					classObject:function(){
+						return{
+							data1:!this.downSort,
+							data2:this.downSort
+						}
+					},
+					checkBox:function(){
+						return{
+							checkBox1:this.downSort,
+							checkBox2:!this.downSort
+						}
+					}
+				},
+				methods:{
+					mount(){
+						this.totalPage = Math.ceil(this.abcs.length/this.pageSize);
+						this.totalPage = this.totalPage==0?1:this.totalPage;
+						this.setCurrentPageData();
+					},
+					add1(){
+						this.addlist=true;
+					},
+					add2(){
+						this.abcs.push(this.addDetail);
+						this.addDetail='';
+						this.addlist=false;
+						this.mount();
+					},
+					arysort(){
+						this.downSort=!this.downSort;
+						this.selectArr = [];
+						this.compare();
+						this.mount();
+					},
+					compare(){
+						var _this=this;
+						return this.abcs.sort(function(a,b){
+							let a1=new Date(a.date);
+							let b1=new Date(b.date);
+							if(_this.downSort){
+								return b1.getTime()-a1.getTime();
+							}else{
+								return a1.getTime()-b1.getTime();
+							}
+						});
+					},
+					setCurrentPageData(){
+						let begin = (this.currentPage-1)*this.pageSize;
+						let end = this.currentPage*this.pageSize;
+						this.currentPageData = this.abcs.slice(begin,end);
+					},
+					prevPage(){
+						if(this.currentPage==1)return;
+						this.selectArr = [];
+						this.currentPage--;
+						this.setCurrentPageData();
+					},
+					nextPage(){
+						if(this.currentPage==this.totalPage)return;
+						this.selectArr = [];
+						this.currentPage++;
+						this.setCurrentPageData();
+					},
+					clickPage(page){
+						this.currentPage=page;
+						this.selectArr = [];
+						this.setCurrentPageData();
+					},
+					deletelist(no,i){
+						this.abcs.splice(i,1);
+						this.mount();
+					},
+					edit(abc){
+						this.editDetail = {
+							date: abc.date,
+							no: abc.no,
+							description: abc.description,
+							total: abc.total
+						}
+						this.editlist = true;
+						this.editno = abc.no;
+					},
+					update(){
+						for(let i = 0; i < this.abcs.length; i++) {
+							if(this.abcs[i].no ==this.editno) {
+								this.abcs[i] = {
+									date: this.editDetail.date,
+									description: this.editDetail.description,
+									total: this.editDetail.total,
+									no: this.editno
+								}
+								this.editlist = false
+							}
+						}
+						this.mount();
+					},
+					alldel(){
+						console.log(this.selectArr);
+						let arr  =[];
+						var len = this.abcs.length;
+						for(let i=0;i<len;i++){
+							if(this.selectArr.indexOf(i)<0){
+								arr.push(this.abcs[i]);
+							}
+						}
+						this.abcs=arr;
+						this.selectArr = [];
+						this.mount();
+					},
+					onEnterPress(){
+						if(this.searchNo){
+							for(let i=0;i<this.abcs.length;i++){
+								if(Number(this.abcs[i].no)==Number(this.searchNo)){
+									this.currentPage=Math.ceil((i+1)/this.pageSize);
+									this.selectArr.push(i-(this.currentPage-1)*this.pageSize);
+									console.log(this.selectArr);
+									break;
+								}else{
+									this.selectArr.splice(i,1);
+								}
+							}
+						}
+						this.mount();
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
